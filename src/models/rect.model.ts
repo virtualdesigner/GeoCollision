@@ -1,3 +1,4 @@
+import { Circle } from './circle.model';
 import { Point, Shape, Type } from './shape.model';
 
 export class Rect implements Shape {
@@ -16,9 +17,41 @@ export class Rect implements Shape {
   collides(other: Shape): boolean {
     switch (other.type) {
       case Type.CIRCLE:
-        throw new Error('Implement Rectangle to Circle collision checking');
+        const circle: Circle = Circle.fromShape(other);
+        const target: Point = this.center;
+        const pointDistance: Point = <Point>{
+          x: Math.abs(circle.center.x - target.x),
+          y: Math.abs(circle.center.y - target.y),
+        };
+
+        if (pointDistance.x > this.width / 2 + circle.radius) {
+          return false;
+        } else if (pointDistance.y > this.height / 2 + circle.radius) {
+          return false;
+        } else if (pointDistance.x <= this.width / 2) {
+          return true;
+        } else if (pointDistance.y <= this.height / 2) {
+          return true;
+        }
+
+        const circleToRectDistance =
+          Math.pow(pointDistance.x - this.width / 2, 2) +
+          Math.pow(pointDistance.y - this.height / 2, 2);
+
+        return circleToRectDistance <= Math.pow(circle.radius, 2);
       case Type.RECT:
-        throw new Error('Implement Rectangle to Rectangle collision checking');
+        const _other = <Rect>(<any>other);
+        const distance: Point = <Point>{
+          x: Math.abs(this.center.x - _other.center.x),
+          y: Math.abs(this.center.y - _other.center.y),
+        };
+        if (
+          distance.x <= this.width / 2 + _other.width / 2 ||
+          distance.y <= this.height / 2 + _other.height / 2
+        ) {
+          return true;
+        }
+        return false;
       default:
         throw new Error(`Invalid shape type!`);
     }

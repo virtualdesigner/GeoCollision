@@ -1,5 +1,5 @@
-import { Rect } from './rect.model'
-import { distanceBetween, Point, Shape, Type } from './shape.model'
+import { Rect } from './rect.model';
+import { distanceBetween, Point, Shape, Type } from './shape.model';
 
 export class Circle implements Shape {
   readonly center: Point;
