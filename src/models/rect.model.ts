@@ -1,4 +1,6 @@
 import { Circle } from './circle.model';
+import { IntersectionDetector } from './intersectionDetector.model';
+import { Line } from './line.model';
 import { Point, Shape, Type } from './shape.model';
 
 export class Rect implements Shape {
@@ -18,40 +20,13 @@ export class Rect implements Shape {
     switch (other.type) {
       case Type.CIRCLE:
         const circle: Circle = Circle.fromShape(other);
-        const target: Point = this.center;
-        const pointDistance: Point = <Point>{
-          x: Math.abs(circle.center.x - target.x),
-          y: Math.abs(circle.center.y - target.y),
-        };
-
-        if (pointDistance.x > this.width / 2 + circle.radius) {
-          return false;
-        } else if (pointDistance.y > this.height / 2 + circle.radius) {
-          return false;
-        } else if (pointDistance.x <= this.width / 2) {
-          return true;
-        } else if (pointDistance.y <= this.height / 2) {
-          return true;
-        }
-
-        const circleToRectDistance =
-          Math.pow(pointDistance.x - this.width / 2, 2) +
-          Math.pow(pointDistance.y - this.height / 2, 2);
-
-        return circleToRectDistance <= Math.pow(circle.radius, 2);
+        return IntersectionDetector.collideCheckCircleWithRect(circle, this);
       case Type.RECT:
         const _other = <Rect>(<any>other);
-        const distance: Point = <Point>{
-          x: Math.abs(this.center.x - _other.center.x),
-          y: Math.abs(this.center.y - _other.center.y),
-        };
-        if (
-          distance.x <= this.width / 2 + _other.width / 2 ||
-          distance.y <= this.height / 2 + _other.height / 2
-        ) {
-          return true;
-        }
-        return false;
+        return IntersectionDetector.collideCheckRectWithRect(this, _other);
+      case Type.LINE:
+        const line: Line = Line.fromShape(other);
+        return IntersectionDetector.collideCheckLineWithRect(line, this);
       default:
         throw new Error(`Invalid shape type!`);
     }
@@ -74,5 +49,18 @@ export class Rect implements Shape {
       polymorph.width,
       polymorph.height,
     );
+  }
+
+  static getEndPoints(rect: Rect): any {
+    return {
+      x1: rect.center.x - rect.width / 2,
+      y1: rect.center.y + rect.height / 2,
+      x2: rect.center.x - rect.width / 2,
+      y2: rect.center.y - rect.height / 2,
+      x3: rect.center.x + rect.width / 2,
+      y3: rect.center.y - rect.height / 2,
+      x4: rect.center.x + rect.width / 2,
+      y4: rect.center.y + rect.height / 2,
+    };
   }
 }

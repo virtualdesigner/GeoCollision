@@ -1,8 +1,9 @@
-import { Test, TestingModule } from '@nestjs/testing'
-import { Circle } from './models/circle.model'
-import { Rect } from './models/rect.model'
-import { PlentinaController } from './plentina.controller'
-import { PlentinaService } from './plentina.service'
+import { Test, TestingModule } from '@nestjs/testing';
+import { response } from 'express';
+import { Circle } from './models/circle.model';
+import { Rect } from './models/rect.model';
+import { PlentinaController } from './plentina.controller';
+import { PlentinaService } from './plentina.service';
 
 describe('PlentinaController', () => {
   let plentinaController: PlentinaController;
@@ -18,7 +19,7 @@ describe('PlentinaController', () => {
 
   describe('root', () => {
     it('should return "Hello World!"', () => {
-      expect(plentinaController.healthCheck()).toBe('Your name here');
+      expect(plentinaController.healthCheck(response).name).toBe('Deepak S M');
     });
   });
 });

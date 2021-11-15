@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common'
-import { Circle } from './models/circle.model'
-import { Rect } from './models/rect.model'
+import { Injectable } from '@nestjs/common';
+import { Circle } from './models/circle.model';
+import { Rect } from './models/rect.model';
 import {
   CollideShapesRequest,
-  CollideShapesResponse
-} from './plentina.controller'
+  CollideShapesResponse,
+} from './plentina.controller';
 
 @Injectable()
 export class PlentinaService {

@@ -1,5 +1,7 @@
+import { IntersectionDetector } from './intersectionDetector.model';
+import { Line } from './line.model';
 import { Rect } from './rect.model';
-import { distanceBetween, Point, Shape, Type } from './shape.model';
+import { Point, Shape, Type } from './shape.model';
 
 export class Circle implements Shape {
   readonly center: Point;
@@ -16,32 +18,13 @@ export class Circle implements Shape {
     switch (other.type) {
       case Type.CIRCLE:
         const _other = <Circle>(<any>other);
-        const distance = distanceBetween(this.center, _other.center);
-
-        return distance <= this.radius + _other.radius;
+        return IntersectionDetector.collideCheckCircleWithCircle(this, _other);
       case Type.RECT:
         const rect: Rect = Rect.fromShape(other);
-        const target: Point = rect.center;
-        const pointDistance: Point = <Point>{
-          x: Math.abs(this.center.x - target.x),
-          y: Math.abs(this.center.y - target.y),
-        };
-
-        if (pointDistance.x > rect.width / 2 + this.radius) {
-          return false;
-        } else if (pointDistance.y > rect.height / 2 + this.radius) {
-          return false;
-        } else if (pointDistance.x <= rect.width / 2) {
-          return true;
-        } else if (pointDistance.y <= rect.height / 2) {
-          return true;
-        }
-
-        const circleToRectDistance =
-          Math.pow(pointDistance.x - rect.width / 2, 2) +
-          Math.pow(pointDistance.y - rect.height / 2, 2);
-
-        return circleToRectDistance <= Math.pow(this.radius, 2);
+        return IntersectionDetector.collideCheckCircleWithRect(this, rect);
+      case Type.LINE:
+        const line: Line = Line.fromShape(other);
+        return IntersectionDetector.collideCheckCircleWithLine(this, line);
       default:
         throw new Error(`Invalid shape type!`);
     }

@@ -1,6 +1,6 @@
-import { Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common'
-import { Response } from 'express'
-import { PlentinaService } from './plentina.service'
+import { Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common';
+import { Response } from 'express';
+import { PlentinaService } from './plentina.service';
 
 export interface ShapeDTO {
   x: number;
